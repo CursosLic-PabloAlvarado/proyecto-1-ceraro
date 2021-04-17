@@ -26,7 +26,13 @@ classdef ReLU < handle
     function st=hasState(s)
       st=false;
     endfunction
-
+    
+    ## Propagación hacia adelante
+    function y=forward(s,a,prediction=false)
+      s.outputs = logistic(a);
+      y=s.outputs;
+      s.gradient = [];
+    endfunction
 
   endmethods
   
