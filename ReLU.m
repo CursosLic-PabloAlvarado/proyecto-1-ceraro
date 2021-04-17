@@ -27,6 +27,14 @@ classdef ReLU < handle
       st=false;
     endfunction
     
+    ## Propagación hacia adelante
+    function y=forward(s,a,prediction=false)
+      s.outputs = logistic(a);
+      y=s.outputs;
+      s.gradient = [];
+    endfunction
+    
+    
     
   endmethods
 endclassdef
