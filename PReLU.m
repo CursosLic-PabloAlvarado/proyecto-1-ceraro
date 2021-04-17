@@ -24,7 +24,7 @@ classdef PReLU < handle
 
     ## Retorna false si la capa no tiene un estado que adaptar
     function st=hasState(s)
-      st=false;
+      st=true;
     endfunction
     
     ## Propagación hacia adelante
