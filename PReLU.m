@@ -70,10 +70,12 @@ classdef PReLU < handle
       if (size(dLds)!=size(s.outputs))
         error("backward de PReLU no compatible con forward previo");
       endif
-      hhh=
+      Ux=a>=0;
+      localGradA= s.A + (1-s.A)*Ux;
+      
       localGrad = s.outputs.*(1-s.outputs);
       s.gradient = localGrad.*dLds;
-      s.gradientA = localGrad.*dLds;
+      s.gradientA = localGradA.*dLds;
 
       g=s.gradient;
     endfunction
