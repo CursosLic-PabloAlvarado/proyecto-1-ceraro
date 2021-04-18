@@ -72,6 +72,7 @@ classdef PReLU < handle
       endif
       localGrad = s.outputs.*(1-s.outputs);
       s.gradient = localGrad.*dLds;
+      s.gradientA = localGrad.*dLds;
 
       g=s.gradient;
     endfunction
