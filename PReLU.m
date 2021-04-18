@@ -5,6 +5,7 @@ classdef PReLU < handle
     outputs=[];
     ## Resultados después de la propagación hacia atrás
     gradient=[];
+    gradientW=[];
   endproperties
   
   methods
