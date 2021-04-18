@@ -33,7 +33,7 @@ if (reuseNetwork && exist(file,"file")==2) # Si encuentra ese archivo
   ann.load(file); # Entonces cárguelo para que nadamás siga entrenando donde quedó
 else # Aqui estoy formando una red 
   ann.nEpochs=500;
-  ann.alpha=0.01;  ## Learning rate
+  ann.alpha=0.001;  ## Learning rate
   ann.beta2=0.99;  ## ADAM si beta2>0
   ann.beta=0.9;    ## Momentum
   ann.minibatch=32;
