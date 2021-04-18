@@ -35,7 +35,12 @@ classdef PReLU < handle
     ## Este gradiente es utilizado por el modelo para actualizar el estado
     ## 
     function g=stateGradient(s)
-      g=s.gradientW;
+      g=s.gradientA;
+    endfunction
+    
+    ## Retorne el estado aprendido
+    function st=state(s)
+      st=s.A;
     endfunction
     
     ## Propagación hacia adelante
