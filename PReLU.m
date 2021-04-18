@@ -29,7 +29,7 @@ classdef PReLU < handle
     
     ## Propagación hacia adelante
     function y=forward(s,a,prediction=false)
-      s.outputs = logistic(a);
+      s.outputs = funct_PReLU(a);
       y=s.outputs;
       s.gradient = [];
     endfunction
