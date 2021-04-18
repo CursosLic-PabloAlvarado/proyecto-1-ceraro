@@ -13,6 +13,7 @@ classdef PReLU < handle
     function s=PReLU()
       s.outputs=[];
       s.gradient=[];
+      s.gradientA=[];
     endfunction
 
     ## En funciones de activación el init no hace mayor cosa más que
