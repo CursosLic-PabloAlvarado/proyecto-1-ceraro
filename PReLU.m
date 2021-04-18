@@ -57,9 +57,12 @@ classdef PReLU < handle
     
     ## Propagación hacia adelante
     function y=forward(s,a,prediction=false)
-      s.outputs = funct_PReLU(a);
+      s.outputs = funct_PReLU(A,a);
       y=s.outputs;
+      
+      # limpie el gradiente en el paso hacia adelante
       s.gradient = [];
+      s.gradientA = [];
     endfunction
     
     ## Propagacion hacia atrás recibe dL/ds de siguientes nodos
