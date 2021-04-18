@@ -29,6 +29,15 @@ classdef PReLU < handle
       st=true;
     endfunction
     
+    ## Retorne el gradiente del estado, que existe solo si esta capa tiene
+    ## algÃºn estado que debe ser aprendido
+    ##
+    ## Este gradiente es utilizado por el modelo para actualizar el estado
+    ## 
+    function g=stateGradient(s)
+      g=s.gradientW;
+    endfunction
+    
     ## Propagación hacia adelante
     function y=forward(s,a,prediction=false)
       s.outputs = funct_PReLU(a);
