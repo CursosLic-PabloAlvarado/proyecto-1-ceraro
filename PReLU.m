@@ -50,6 +50,11 @@ classdef PReLU < handle
       st=s.A;
     endfunction
     
+    ## Reescriba el estado aprendido
+    function setState(s,A)
+      s.A=A;
+    endfunction
+    
     ## Propagación hacia adelante
     function y=forward(s,a,prediction=false)
       s.outputs = funct_PReLU(a);
