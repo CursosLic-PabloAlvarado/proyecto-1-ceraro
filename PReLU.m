@@ -3,9 +3,14 @@ classdef PReLU < handle
   properties    
     ## Resultados después de la propagación hacia adelante
     outputs=[];
+    
     ## Resultados después de la propagación hacia atrás
     gradient=[];
     gradientA=[];
+    
+    ## Alphas de la capa de activación
+    A=[];
+
   endproperties
   
   methods
