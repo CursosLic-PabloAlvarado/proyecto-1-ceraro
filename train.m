@@ -27,30 +27,31 @@ ann=sequential();
 
 file="ann.dat";
 
-reuseNetwork = false;
+reuseNetwork = false; # Con reusenetwork = true la red una vez iniciado el entrenamiento, irá almacenando la red en un archivo 
 
-if (reuseNetwork && exist(file,"file")==2)
-  ann.load(file);
-else
+if (reuseNetwork && exist(file,"file")==2) # Si encuentra ese archivo  
+  ann.load(file); # Entonces cárguelo para que nadamás siga entrenando donde quedó
+else # Aqui estoy formando una red 
   ann.nEpochs=500;
   ann.alpha=0.01;  ## Learning rate
   ann.beta2=0.99;  ## ADAM si beta2>0
   ann.beta=0.9;    ## Momentum
   ann.minibatch=32;
   ann.method="stochastic";
-
-  ann.add({input_layer(2),
-           dense_unbiased(16),
-           sigmoide(),
-           dense_unbiased(16),
-           sigmoide(),
-           dense_unbiased(numClasses),
-           sigmoide()});
   
-  ann.add(olsloss());
+  # Se está usando un cell arrays (arreglo de celdas) {}. Una celda es cualquier cosa
+  ann.add({input_layer(2), # Capa de entrada que recibe 2 dimensiones
+           dense_unbiased(16), # Capa densa sin sesgo 
+           ReLU(), # 
+           dense_unbiased(16),
+           ReLU(),
+           dense_unbiased(numClasses),
+           sigmoide()}); 
+  
+  ann.add(olsloss()); # Capa de pérdida
 endif
 
-loss=ann.train(X,Y,vX,vY);
-ann.save(file);
+loss=ann.train(X,Y,vX,vY); # Se entrena la red 
+ann.save(file); 
 
 ## TODO: falta agregar el resto de pruebas y visualizaciones
