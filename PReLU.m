@@ -63,7 +63,7 @@ classdef PReLU < handle
       y=s.outputs;
       
       # limpie el gradiente en el paso hacia adelante
-      s.gradient = [];
+      s.gradientX = [];
       s.gradientA = [];
     endfunction
     
