@@ -2,10 +2,11 @@
 classdef PReLU < handle
   properties    
     ## Resultados después de la propagación hacia adelante
-    outputs=[];
+    #outputs=[];
+    inputsX=[];
     
     ## Resultados después de la propagación hacia atrás
-    gradient=[];
+    gradientX=[];
     gradientA=[];
     
     ## Alphas de la capa de activación
@@ -17,6 +18,7 @@ classdef PReLU < handle
     ## Constructor ejecuta un forward si se le pasan datos
     function s=PReLU()
       s.outputs=[];
+      s.inputs=[];
       s.gradient=[];
       
       s.A=[];
@@ -71,8 +73,8 @@ classdef PReLU < handle
         error("backward de PReLU no compatible con forward previo");
       endif
       Ux=a>=0;
-      localGradA= s.A + (1-s.A)*Ux;
-      
+      localGradX= s.A + (1-s.A).*Ux;
+      localGradA= Ux.*a
       localGrad = s.A + (1-s.A).*Ux;
       s.gradient = localGrad.*dLds;
       s.gradientA = localGradA.*dLds;
