@@ -77,7 +77,7 @@ classdef PReLU < handle
       localGradA= Ux.*s.inputsX;
       localGrad = s.A + (1-s.A).*Ux;
       
-      s.gradient = localGrad.*dLds;
+      s.gradientX = localGrad.*dLds;
       s.gradientA = localGradA.*dLds;
 
       g=s.gradientX;
