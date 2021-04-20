@@ -2,7 +2,7 @@
 classdef PReLU < handle
   properties    
     ## Resultados después de la propagación hacia adelante
-    outputs=[];
+    outputs=[]; # En PReLU no es necesario almacenar las salidas porque no se usan par calcular los gradientes
     inputsX=[];
     
     ## Resultados después de la propagación hacia atrás
