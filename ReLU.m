@@ -39,7 +39,8 @@ classdef ReLU < handle
       if (size(dLds)!=size(s.outputs))
         error("backward de ReLU no compatible con forward previo");
       endif
-      localGrad = s.outputs.*(1-s.outputs);
+      Ux=s.inputsX>=0;
+      localGrad = Ux;
       s.gradient = localGrad.*dLds;
       
       g=s.gradient;
