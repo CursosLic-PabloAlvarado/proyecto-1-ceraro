@@ -76,9 +76,9 @@ classdef PReLU < handle
       localGradX= s.A + (1-s.A).*Ux;
       localGradA= Ux.*s.inputsX; 
       localGrad = s.A + (1-s.A).*Ux;
-      # adod que la función de PReLU consiste en sacar un máximo entre dos valores 
+      # Dado que la función de PReLU consiste en sacar un máximo entre dos valores (compuerta max)
       s.gradientX = localGradX.*dLds; # Dado 
-      s.gradientA = localGradA.*dLds;  
+      s.gradientA = localGradA.*dLds; 
 
       g=s.gradientX;
     endfunction
