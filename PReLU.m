@@ -2,7 +2,7 @@
 classdef PReLU < handle
   properties    
     ## Resultados después de la propagación hacia adelante
-    #outputs=[];
+    outputs=[];
     inputsX=[];
     
     ## Resultados después de la propagación hacia atrás
