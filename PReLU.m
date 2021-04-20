@@ -68,18 +68,19 @@ classdef PReLU < handle
     endfunction
     
     ## Propagacion hacia atrás recibe dL/ds de siguientes nodos
-    function g=backward(s,a,dLds)
+    function g=backward(s,dLds)
       if (size(dLds)!=size(s.outputs))
         error("backward de PReLU no compatible con forward previo");
       endif
       Ux=a>=0;
       localGradX= s.A + (1-s.A).*Ux;
-      localGradA= Ux.*a
+      localGradA= Ux.*s.inputsX;
       localGrad = s.A + (1-s.A).*Ux;
+      
       s.gradient = localGrad.*dLds;
       s.gradientA = localGradA.*dLds;
 
-      g=s.gradient;
+      g=s.gradientX;
     endfunction
 
   endmethods
