@@ -19,7 +19,7 @@ classdef PReLU < handle
     function s=PReLU()
       s.outputs=[];
       s.inputsX=[];
-      s.gradient=[];
+      s.gradientX=[];
       
       s.A=[];
       s.gradientA=[];
