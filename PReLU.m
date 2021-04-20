@@ -18,7 +18,7 @@ classdef PReLU < handle
     ## Constructor ejecuta un forward si se le pasan datos
     function s=PReLU()
       s.outputs=[];
-      s.inputs=[];
+      s.inputsX=[];
       s.gradient=[];
       
       s.A=[];
