@@ -31,6 +31,8 @@ classdef PReLU < handle
     ## La función devuelve la dimensión de la salida de la capa
     function outSize=init(s,inputSize)
       outSize=inputSize;
+      
+      s.A = 0;
     endfunction 
 
     ## Retorna false si la capa no tiene un estado que adaptar
