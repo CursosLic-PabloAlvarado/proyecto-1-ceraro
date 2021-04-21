@@ -1,5 +1,5 @@
-## "Capa" ReLU, 
-classdef ReLU < handle
+## "Capa" SofMax, 
+classdef SoftMax < handle
   properties    
     ## Resultados después de la propagación hacia adelante
     outputs=[];
