@@ -39,8 +39,8 @@ classdef ReLU < handle
       if (size(dLds)!=size(s.outputs))
         error("backward de SoftMax no compatible con forward previo");
       endif
-      localGrad = s.outputs.*(1-s.outputs);
-      s.gradient = localGrad.*dLds;
+      #localGrad =  
+      s.gradient = s.outputs.*dLds-([s.outputs.*dLds])*s.outputs;
 
       g=s.gradient;
     endfunction
