@@ -40,7 +40,8 @@ classdef SoftMax < handle
         error("backward de SoftMax no compatible con forward previo");
       endif
       #localGrad =  
-      s.gradient = s.outputs.*dLds-([(s.outputs.*dLds)*ones(columns(s.outputs),1)]*ones(columns(s.outputs),1)')*s.outputs;
+      one_s=ones(columns(s.outputs),1);
+      s.gradient = s.outputs.*dLds-([(s.outputs.*dLds)*one_s]*one_s')*s.outputs;
 
       g=s.gradient;
     endfunction
