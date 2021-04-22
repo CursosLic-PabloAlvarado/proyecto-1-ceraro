@@ -42,9 +42,9 @@ else # Aqui estoy formando una red
   # Se está usando un cell arrays (arreglo de celdas) {}. Una celda es cualquier cosa
   ann.add({input_layer(2), # Capa de entrada que recibe 2 dimensiones
            dense_unbiased(16), # Capa densa sin sesgo 
-           ReLU(), # 
+           sigmoide(), # 
            dense_unbiased(16),
-           ReLU(),
+           sigmoide(),
            dense_unbiased(numClasses),
            sigmoide()}); 
   
