@@ -11,6 +11,7 @@ classdef PReLU < handle
     
     ## Alphas de la capa de activación
     A=[];
+    Ux=[]; # Función escalón unitario 
 
   endproperties
   
@@ -22,6 +23,7 @@ classdef PReLU < handle
       s.gradientX=[];
       
       s.A=[];
+      s.Ux=[];
       s.gradientA=[];
     endfunction
 
@@ -32,7 +34,9 @@ classdef PReLU < handle
     function outSize=init(s,inputSize)
       outSize=inputSize;
       
-      s.A = 0;
+      s.A = 0; # Así se comporta como ReLU
+               # Se comporta como Leaky ReLU con s.A = 0.1 
+               
     endfunction 
 
     ## Retorna false si la capa no tiene un estado que adaptar
@@ -56,13 +60,18 @@ classdef PReLU < handle
     
     ## Reescriba el estado aprendido
     function setState(s,A)
-      s.A=A;
+       
+      s.A=min(max(A,0),.99); # min y max para evitar alphas negativos y alphas igual a 1
+                             # Funciona para cuando las alphas sean dadas como vector pero también como escalar 
     endfunction
     
     ## Propagación hacia adelante
     function y=forward(s,a,prediction=false)
       s.outputs = funct_PReLU(s.A,a);
       y=s.outputs;
+      
+      s.inputsX = a; #  Almaceno las entradas
+      s.Ux = a>=0;
       
       # limpie el gradiente en el paso hacia adelante
       s.gradientX = [];
@@ -74,9 +83,8 @@ classdef PReLU < handle
       if (size(dLds)!=size(s.outputs))
         error("backward de PReLU no compatible con forward previo");
       endif
-      Ux=s.inputsX>=0;
-      localGradX= s.A + (1-s.A).*Ux;
-      localGradA= (1-Ux).*s.inputsX; 
+      localGradX= s.A + (1-s.A).*s.Ux;
+      localGradA= (1-s.Ux).*s.inputsX; 
       # Dado que la función de PReLU consiste en sacar un máximo entre dos valores (compuerta max)
       s.gradientA = localGradA.*dLds;
       s.gradientX = localGradX.*dLds;  
