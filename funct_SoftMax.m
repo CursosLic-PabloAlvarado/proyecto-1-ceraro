@@ -1,5 +1,10 @@
 function val=funct_SoftMax(x)
-  val = exp(x-max(x).*ones(rows(x),1));
-  nor = sum(val);
-  val = val ./ nor;
+  if columns(x)==1
+    val = funct_SoftMax(x'); # Es para cuando x llega como vector
+  else
+    val = exp(x-max(x,[],2)); # Es para una matriz de diseño
+                              # Octave aplica un broadcasting por eso no es necesario multiplicaciones por vectores de 1's
+    nor = sum(val);
+    val = val ./ nor;
+  endif
 endfunction
