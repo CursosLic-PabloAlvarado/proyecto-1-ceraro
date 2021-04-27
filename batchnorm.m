@@ -13,7 +13,8 @@ classdef batchnorm < handle
     
     ## Parámetro usado por el filtro que estima la varianza y media completas
     beta=0.9;
-    
+    u1=[];
+    r21=[];
     ## Valor usado para evitar divisiones por cero
     epsilon=1e-10;
  
@@ -27,7 +28,6 @@ classdef batchnorm < handle
     function s=batchnorm(beta=0.9,epsilon=1e-10)
       s.beta=beta;
       s.epsilon=epsilon;
-      
       ## TODO: 
       
     endfunction
@@ -59,20 +59,22 @@ classdef batchnorm < handle
       m=rows(X);
       u=(1/m)*ones(m,1)'*X;
       r2=(1/m)*sum(X.*X)-u.*u+s.epsilon*ones(m,1)'
-      r=
-      
+   
       if (prediction)
         
         ## TODO: Qué hacer en la predicción?
-        y=X; ## BORRAR esta línea cuando tenga la verdadera solución
+        s.u1=s.beta*u1+(1-s.beta)*u
+        s.r21=s.beta*r21+(1-s.beta)*r2
+        y=(X-ones(m,1)*s.u1)diag(sqrt(s.r21));
         
       else
         if (columns(X)==1)
+          u1=
           ## Imposible normalizar un solo dato.  Devuélvalo tal y como es
           y=X;          
         else
           ## TODO: Qué hacer en el entrenamiento?
-          y=(X-ones(m,1)*u)diag(r2.^1/2); ## BORRAR esta línea cuando tenga la verdadera solución
+          y=(X-ones(m,1)*u)diag(sqrt(r2)); ## BORRAR esta línea cuando tenga la verdadera solución
       
         endif
       endif
