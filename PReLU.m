@@ -83,11 +83,12 @@ classdef PReLU < handle
       if (size(dLds)!=size(s.outputs))
         error("backward de PReLU no compatible con forward previo");
       endif
-      localGradX= s.A + (1-s.A).*s.Ux;
+      localGradX= s.A + (1-s.A)*s.Ux; # Revisado a mano: Si alpha que llega es valor escalar entonces está correcto
+                                      # No hace falta el .* porque aunque s.A es escalar, octave hace un broadcasting  
       localGradA= (1-s.Ux).*s.inputsX; 
       # Dado que la función de PReLU consiste en sacar un máximo entre dos valores (compuerta max)
-      s.gradientA = localGradA.*dLds;
-      s.gradientX = localGradX.*dLds;  
+      s.gradientA = sum(localGradA.*dLds);
+      s.gradientX = localGradX.*dLds;  #Revisado a mano: está correcto
 
       g=s.gradientX;
     endfunction
