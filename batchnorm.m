@@ -56,6 +56,10 @@ classdef batchnorm < handle
     ## está siendo llamado en el proceso de entrenamiento (false) o en el
     ## proceso de predicción (true)      
     function y=forward(s,X,prediction=false)
+      m=rows(X);
+      u=(1/m)*ones(m,1)'*X;
+      r2=(1/m)*sum(X.*X)-u.*u+s.epsilon*ones(m,1)'
+      r=
       
       if (prediction)
         
@@ -68,7 +72,7 @@ classdef batchnorm < handle
           y=X;          
         else
           ## TODO: Qué hacer en el entrenamiento?
-          y=X; ## BORRAR esta línea cuando tenga la verdadera solución
+          y=(X-ones(m,1)*u)diag(r2.^1/2); ## BORRAR esta línea cuando tenga la verdadera solución
       
         endif
       endif
