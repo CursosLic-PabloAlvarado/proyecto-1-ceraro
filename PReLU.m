@@ -86,9 +86,10 @@ classdef PReLU < handle
       localGradX= s.A + (1-s.A).*s.Ux; # Revisado a mano: Si alpha que llega es valor escalar entonces está correcto
                                       # No hace falta el .* porque aunque s.A es escalar, octave hace un broadcasting
                                       # De la 2° solución obtenida s.A sería un vector por lo que sí necesito el .*   
-      localGradA= (1-s.Ux).*s.inputsX; 
+      localGradA= (1-s.Ux).*s.inputsX;
+      
       # Dado que la función de PReLU consiste en sacar un máximo entre dos valores (compuerta max)
-      s.gradientA = sum(localGradA.*dLds);
+      s.gradientA = sum(sum(localGradA.*dLds)');
       s.gradientX = localGradX.*dLds;  #Revisado a mano: está correcto
 
       g=s.gradientX;
