@@ -14,8 +14,6 @@
 ## cuadrados de las diferencias
 classdef olsloss < handle
   properties
-    ## Entrada en la propagación hacia adelante
-    diff=[];
     ## Resultados después de la propagación hacia adelante
     outputs=[];
     ## Resultados después de la propagación hacia atrás
@@ -25,7 +23,6 @@ classdef olsloss < handle
   methods
     ## Constructor solo incializa los datos
     function s=olsloss()
-      s.diff=[];
       s.outputs=[];
       s.gradient=[];
     endfunction
@@ -55,8 +52,7 @@ classdef olsloss < handle
       if (isscalar(Ygt) && isboolean(Ygt))
         error("Capas de pérdida deben ser las últimas del grafo");
       elseif (isreal(Y) && ismatrix(Y) && (size(Y)==size(Ygt)))
-        s.diff=Y-Ygt;
-        s.outputs = 0.5*(norm(s.diff,"fro")^2); # Frobenius norm
+        s.outputs = -Ygt'*log(Y);
         J=s.outputs;
         s.gradient = [];
       else
@@ -70,7 +66,7 @@ classdef olsloss < handle
         error("backward de olsloss no compatible con forward previo");
       endif
       ## Asumiendo que dLds es escalar (la salida debería serlo)
-      s.gradient = s.diff*dLds;
+      s.gradient = (-Ygt/Y)*dLds;
       
       g=s.gradient;
     endfunction

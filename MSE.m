@@ -71,6 +71,7 @@ classdef olsloss < handle
         error("backward de olsloss no compatible con forward previo");
       endif
       ## Asumiendo que dLds es escalar (la salida debería serlo)
+      m=rows(Y)
       s.gradient = (2/m)*s.diff*dLds;
       
       g=s.gradient;
