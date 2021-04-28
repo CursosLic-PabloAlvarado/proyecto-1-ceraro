@@ -120,11 +120,11 @@ classdef dense_unbiased < handle
       ## El parámetro 'prediction' permite determinar si este método
       ## está siendo llamado en el proceso de entrenamiento (false) o en el
       ## proceso de predicción (true)      
-      s.inputsX=X;
+      s.inputsX=[ones(columns(X),1);X];
       if (columns(X)==1) 
         y = s.W*X; %% Si es vector, asuma columna
       else
-        y = X*s.W'; %% Si es matriz de diseño, asuma datos en filas
+        y = [ones(columns(X),1);X]*s.W'; %% Si es matriz de diseño, asuma datos en filas
       endif
       
       # limpie el gradiente en el paso hacia adelante

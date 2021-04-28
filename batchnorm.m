@@ -13,7 +13,8 @@ classdef batchnorm < handle
     
     ## Parámetro usado por el filtro que estima la varianza y media completas
     beta=0.9;
-    
+    u1=[];
+    r21=[];
     ## Valor usado para evitar divisiones por cero
     epsilon=1e-10;
  
@@ -27,7 +28,6 @@ classdef batchnorm < handle
     function s=batchnorm(beta=0.9,epsilon=1e-10)
       s.beta=beta;
       s.epsilon=epsilon;
-      
       ## TODO: 
       
     endfunction
@@ -56,19 +56,25 @@ classdef batchnorm < handle
     ## está siendo llamado en el proceso de entrenamiento (false) o en el
     ## proceso de predicción (true)      
     function y=forward(s,X,prediction=false)
-      
+      m=rows(X);
+      u=(1/m)*ones(m,1)'*X;
+      r2=(1/m)*sum(X.*X)-u.*u+s.epsilon*ones(m,1)'
+   
       if (prediction)
         
         ## TODO: Qué hacer en la predicción?
-        y=X; ## BORRAR esta línea cuando tenga la verdadera solución
+        s.u1=s.beta*u1+(1-s.beta)*u
+        s.r21=s.beta*r21+(1-s.beta)*r2
+        y=(X-ones(m,1)*s.u1)diag(sqrt(s.r21));
         
       else
         if (columns(X)==1)
+          u1=
           ## Imposible normalizar un solo dato.  Devuélvalo tal y como es
           y=X;          
         else
           ## TODO: Qué hacer en el entrenamiento?
-          y=X; ## BORRAR esta línea cuando tenga la verdadera solución
+          y=(X-ones(m,1)*u)diag(sqrt(r2)); ## BORRAR esta línea cuando tenga la verdadera solución
       
         endif
       endif
@@ -78,7 +84,7 @@ classdef batchnorm < handle
     ## y retorna el gradiente necesario para la retropropagación. que será
     ## pasado a nodos anteriores en el grafo.
     function g=backward(s,dLds)      
-      g=dLds; ## TODO: CORREGIR, pues esto no es el verdadero gradiente
+      g=(diag(r21)^-1)dLds; ## gradiantes es igual a 1/diag
     endfunction
   endmethods
 endclassdef
