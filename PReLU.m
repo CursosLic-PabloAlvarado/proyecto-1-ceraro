@@ -89,7 +89,7 @@ classdef PReLU < handle
       localGradA= (1-s.Ux).*s.inputsX;
       
       # Dado que la función de PReLU consiste en sacar un máximo entre dos valores (compuerta max)
-      s.gradientA = sum(sum((localGradA.*dLds)')); # Revisado a mano: está correcto
+      s.gradientA = sum(sum((localGradA.*dLds)')'); # Revisado a mano: está correcto
       s.gradientX = localGradX.*dLds;  #Revisado a mano: está correcto
 
       g=s.gradientX;
