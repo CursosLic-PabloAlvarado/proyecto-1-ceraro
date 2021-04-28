@@ -84,7 +84,7 @@ classdef batchnorm < handle
     ## y retorna el gradiente necesario para la retropropagación. que será
     ## pasado a nodos anteriores en el grafo.
     function g=backward(s,dLds)      
-      g=dLds; ## TODO: CORREGIR, pues esto no es el verdadero gradiente
+      g=(diag(r21)^-1)dLds; ## gradiantes es igual a 1/diag
     endfunction
   endmethods
 endclassdef
