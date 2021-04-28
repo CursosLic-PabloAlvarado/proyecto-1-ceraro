@@ -55,8 +55,9 @@ classdef olsloss < handle
       if (isscalar(Ygt) && isboolean(Ygt))
         error("Capas de pérdida deben ser las últimas del grafo");
       elseif (isreal(Y) && ismatrix(Y) && (size(Y)==size(Ygt)))
+        m=rows(Y)
         s.diff=Y-Ygt;
-        s.outputs = 0.5*(norm(s.diff,"fro")^2); # Frobenius norm
+        s.outputs = (1/m)*(norm(s.diff,"fro")^2); # Frobenius norm
         J=s.outputs;
         s.gradient = [];
       else
@@ -70,7 +71,7 @@ classdef olsloss < handle
         error("backward de olsloss no compatible con forward previo");
       endif
       ## Asumiendo que dLds es escalar (la salida debería serlo)
-      s.gradient = s.diff*dLds;
+      s.gradient = (2/m)*s.diff*dLds;
       
       g=s.gradient;
     endfunction
