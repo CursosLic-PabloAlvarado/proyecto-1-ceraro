@@ -3,6 +3,7 @@ classdef ReLU < handle
   properties    
     ## Resultados después de la propagación hacia adelante
     outputs=[];
+    inputsX=[];
     ## Resultados después de la propagación hacia atrás
     gradient=[];
   endproperties
@@ -11,6 +12,7 @@ classdef ReLU < handle
     ## Constructor ejecuta un forward si se le pasan datos
     function s=ReLU()
       s.outputs=[];
+      s.inputsX=[];
       s.gradient=[];
     endfunction
     
@@ -31,6 +33,7 @@ classdef ReLU < handle
     function y=forward(s,a,prediction=false)
       s.outputs = funct_ReLU(a);
       y=s.outputs;
+      s.inputsX=a;
       s.gradient = [];
     endfunction
     
@@ -40,8 +43,8 @@ classdef ReLU < handle
         error("backward de ReLU no compatible con forward previo");
       endif
       Ux=s.inputsX>=0;
-      localGrad = Ux;
-      s.gradient = localGrad.*dLds;
+      #localGrad = Ux;
+      s.gradient = Ux.*dLds;
       
       g=s.gradient;
     endfunction

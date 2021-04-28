@@ -20,7 +20,7 @@ classdef sequential < handle
 
   properties
     ## Constantes:
-    layers={};
+    layers={}; # Capas
 
     ## Training parameters
     nEpochs=2000;
@@ -39,10 +39,10 @@ classdef sequential < handle
 
   methods
     function s=sequential()
-      layers={};
+      layers={}; 
     endfunction
     
-    function add(s,layer)
+    function add(s,layer) # Método para agregar capas 
       ## Agregue una capa al modelo secuencial
       ## La primera capa debe ser una capa del tipo "input_layer" para asÃ­
       ## indicar la dimensiÃ³n esperada de cada dato de entrada
@@ -86,8 +86,8 @@ classdef sequential < handle
       endif
       
       minibatch = s.minibatch;
-      if (strcmp(s.method,"batch"))
-        minibatch=rows(X);
+      if (strcmp(s.method,"batch")) # Si estoy en que el método es batch 
+        minibatch=rows(X); # Entonces el minibatch tiene como tamaño todos los datos
       endif
         
       
@@ -108,9 +108,9 @@ classdef sequential < handle
         
         ## itere sobre todos los minibatches de la Ã©poca
         for numMB=1:totalBatch; 
-          subIdx=idx((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch));
-          subX=X(subIdx,:);
-          subY=Y(subIdx,:);
+          subIdx=idx((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
+          subX=X(subIdx,:); 
+          subY=Y(subIdx,:); 
           
           ## Forward prop
           y=s.layers{1}.forward(subX);
@@ -130,16 +130,19 @@ classdef sequential < handle
                     
           ## Update rules
           for i=1:numLayers-1 ## Excluya capa de pÃ©rdida 
-            if (s.layers{i}.hasState())
+            if (s.layers{i}.hasState()) # Si la capa por la que voy tiene un estado (pesos)
            
               
               switch (s.method)
               case "batch"
                 s.layers{i}.setState(s.layers{i}.state() -
-                                     s.alpha*s.layers{i}.stateGradient());
+                                     s.alpha*s.layers{i}.stateGradient()); # Entonces su nuevo estado es: el estado que ya tiene
+                                                                           # menos alfa por el gradiente
+                                     
+              # "batch" y "stochastic" se diferencian en qué tamaño de minilote uso                                        
               case "stochastic"
                 s.layers{i}.setState(s.layers{i}.state() -
-                                     s.alpha*s.layers{i}.stateGradient());
+                                     s.alpha*s.layers{i}.stateGradient()); 
               
               ## TODO: Agregar aquÃ­ los otros mÃ©todos de optimizaciÃ³n.
               ##       Observe que va a requerir otros arreglos de celdas
@@ -168,7 +171,7 @@ classdef sequential < handle
         endif
       endfor ## for each epoch
       
-    endfunction
+    endfunction # de la función train
     
     
     ## PredicciÃ³n con modelo preentrenado
@@ -182,13 +185,13 @@ classdef sequential < handle
       
     endfunction
 
-    ## PredicciÃ³n con modelo preentrenado
+    ## PredicciÃ³n con modelo preentrenado # Es para hacer pruebas
     function [y,loss]=computeLoss(s,vX,vY)
       numLayers=length(s.layers);
     
-      ## Forward prop
+      ## Forward propagation
       y=s.layers{1}.forward(vX);
-      for l=2:numLayers-1
+      for l=2:numLayers-1 # Pero dejando la capa de error por fuera porque no interesa para predecir 
         y=s.layers{l}.forward(y);
       endfor
       loss=s.layers{numLayers}.forward(y,vY);

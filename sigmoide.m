@@ -16,7 +16,7 @@ classdef sigmoide < handle
 
   methods
     ## Constructor ejecuta un forward si se le pasan datos
-    function s=sigmoide()
+    function s=sigmoide()# Se inicializan las propiedades de la clase sin nada
       s.outputs=[];
       s.gradient=[];
     endfunction
@@ -38,16 +38,16 @@ classdef sigmoide < handle
     function y=forward(s,a,prediction=false)
       s.outputs = logistic(a);
       y=s.outputs;
-      s.gradient = [];
+      s.gradient = []; # Le digo que el gradiente aun no lo he calculado
     endfunction
 
     ## PropagaciÃ³n hacia atrÃ¡s recibe dL/ds de siguientes nodos
-    function g=backward(s,dLds)
+    function g=backward(s,dLds) # dLds: gradiente del error (L) respecto a la salida (s)
       if (size(dLds)!=size(s.outputs))
         error("backward de sigmoide no compatible con forward previo");
       endif
-      localGrad = s.outputs.*(1-s.outputs);
-      s.gradient = localGrad.*dLds;
+      localGrad = s.outputs.*(1-s.outputs); # s.outputs es la salida que yo almacené justo en la forward
+      s.gradient = localGrad.*dLds; # .* porque este es el típico caso en el que el Jacobiano es diagonal
       
       g=s.gradient;
     endfunction

@@ -75,7 +75,7 @@ classdef dense_unbiased < handle
     function outSize=init(s,inputSize)
       
       cols = inputSize;
-      rows = s.units;
+      rows = s.units; # Cantidad de neuronas
       
       ## LeCun Normal (para selu)
       s.W=normrnd(0,1/sqrt(cols),rows,cols);

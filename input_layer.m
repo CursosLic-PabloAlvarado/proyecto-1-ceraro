@@ -13,7 +13,7 @@
 classdef input_layer < handle
   properties
     ## Dimensión de la entrada
-    units=0;
+    units=0; # Porque la capa de entrada solo contiene el vector de entrada
   endproperties
 
   methods
