@@ -41,10 +41,13 @@ else # Aqui estoy formando una red
   
   # Se está usando un cell arrays (arreglo de celdas) {}. Una celda es cualquier cosa
   ann.add({input_layer(2), # Capa de entrada que recibe 2 dimensiones
+           batchnorm(),
            dense_unbiased(16), # Capa densa sin sesgo 
-           sigmoide(), # 
+           sigmoide(), #
+           batchnorm(), 
            dense_unbiased(16),
            sigmoide(),
+           batchnorm(),
            dense_unbiased(numClasses),
            SoftMax()});
   ann.add(MSE()); # Capa de pérdida
