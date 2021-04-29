@@ -12,7 +12,7 @@
 ##
 ## Esta capa calcula entonces la pérdida como la mitad de la suma de los
 ## cuadrados de las diferencias
-classdef olsloss < handle
+classdef MSE < handle
   properties
     ## Entrada en la propagación hacia adelante
     diff=[];
@@ -60,18 +60,18 @@ classdef olsloss < handle
         J=s.outputs;
         s.gradient = [];
       else
-        error("olsloss espera dos matrices reales del mismo tamaño");
+        error("MSE espera dos matrices reales del mismo tamaño");
       endif
     endfunction
 
     ## Propagación hacia atrás recibe dL/ds de siguientes nodos
     function g=backward(s,dLds)
       if (size(dLds)!=size(s.outputs))
-        error("backward de olsloss no compatible con forward previo");
+        error("backward de MSE no compatible con forward previo");
       endif
       ## Asumiendo que dLds es escalar (la salida debería serlo)
-      m=rows(Y)
-      s.gradient = (2/rows(Y))*s.diff*dLds;
+      m=rows(s.outputs);
+      s.gradient = (2/rows(s.outputs))*s.diff*dLds;
       g=s.gradient;
     endfunction
   endmethods
