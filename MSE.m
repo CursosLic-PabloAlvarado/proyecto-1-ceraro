@@ -70,7 +70,7 @@ classdef MSE < handle
         error("backward de MSE no compatible con forward previo");
       endif
       ## Asumiendo que dLds es escalar (la salida debería serlo)
-      s.gradient =(2/rwos(s.outputs))*s.diff*dLds;
+      s.gradient =(2/rows(s.outputs))*s.diff*dLds;
       g=s.gradient;
     endfunction
   endmethods
