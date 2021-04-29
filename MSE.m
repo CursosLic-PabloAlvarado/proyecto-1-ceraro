@@ -12,7 +12,7 @@
 ##
 ## Esta capa calcula entonces la pérdida como la mitad de la suma de los
 ## cuadrados de las diferencias
-classdef olsloss < handle
+classdef MSE < handle
   properties
     ## Entrada en la propagación hacia adelante
     diff=[];
