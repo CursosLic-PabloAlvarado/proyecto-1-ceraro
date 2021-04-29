@@ -74,7 +74,7 @@ classdef batchnorm < handle
         else
           ## TODO: Qué hacer en el entrenamiento?
           u_t=(1/m)*ones(m,1)'*X;
-          s.r2=(1/m)*sum(X.*X)-u_t'.*u_t'+s.epsilon*ones(rows(X),1);
+          s.r2=(1/m)*sum(X.*X)-u_t'.*u_t'+s.epsilon*ones(columns(X),1);
           s.u1=s.beta*s.u1+(1-s.beta)*u_t';
           s.r21=s.beta*r21+(1-s.beta)*s.r2;
           y=(X-ones(m,1)*u)*(diag(sqrt(s.r2))^-1); ## BORRAR esta línea cuando tenga la verdadera solución
