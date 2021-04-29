@@ -15,6 +15,7 @@ classdef batchnorm < handle
     beta=0.9;
     u1=[];
     r21=[];
+    r2=[];
     ## Valor usado para evitar divisiones por cero
     epsilon=1e-10;
  
@@ -30,6 +31,7 @@ classdef batchnorm < handle
       s.epsilon=epsilon;
       s.u1=[];
       s.r21=[];
+      s.r2=[];
       ## TODO: 
       
     endfunction
@@ -72,10 +74,10 @@ classdef batchnorm < handle
         else
           ## TODO: Qué hacer en el entrenamiento?
           u=(1/m)*ones(m,1)'*X;
-          r2=(1/m)*sum(X.*X)-u'.*u'+s.epsilon*ones(m,1)'
+          s.r2=(1/m)*sum(X.*X)-u'.*u'+s.epsilon*ones(m,1)'
           s.u1=s.beta*u1+(1-s.beta)*u
-          s.r21=s.beta*r21+(1-s.beta)*r2
-          y=(X-ones(m,1)*u)*(diag(sqrt(r2))^-1); ## BORRAR esta línea cuando tenga la verdadera solución
+          s.r21=s.beta*r21+(1-s.beta)*s.r2
+          y=(X-ones(m,1)*u)*(diag(sqrt(s.r2))^-1); ## BORRAR esta línea cuando tenga la verdadera solución
       
         endif
       endif
@@ -85,7 +87,7 @@ classdef batchnorm < handle
     ## y retorna el gradiente necesario para la retropropagación. que será
     ## pasado a nodos anteriores en el grafo.
     function g=backward(s,dLds)      
-      g=(diag(s.r21)^-1)*dLds; ## gradiantes es igual a 1/diag
+      g=(diag(s.r2)^-1)*dLds; ## gradiantes es igual a 1/diag
     endfunction
   endmethods
 endclassdef
