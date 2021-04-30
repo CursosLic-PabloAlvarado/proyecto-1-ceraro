@@ -16,6 +16,7 @@ classdef batchnorm < handle
     u1=[];
     r21=[];
     r2=[];
+    firsttime=true;
     ## Valor usado para evitar divisiones por cero
     epsilon=1e-10;
  
@@ -42,7 +43,7 @@ classdef batchnorm < handle
     ## la dimensión de los datos a la entrada de la capa
     function outSize=init(s,inputSize)
       outSize=inputSize;
-      
+      s.firsttime=true;
       ## TODO: 
       
     endfunction
@@ -73,12 +74,18 @@ classdef batchnorm < handle
           y=X;          
         else
           ## TODO: Qué hacer en el entrenamiento?
-          u_t=(1/m)*ones(m,1)'*X;
-          s.r2=(1/m)*sum(X.*X)-u_t'.*u_t'+s.epsilon*ones(columns(X),1);
-          s.u1=s.beta*s.u1+(1-s.beta)*u_t';
-          s.r21=s.beta*r21+(1-s.beta)*s.r2;
-          y=(X-ones(m,1)*u)*(diag(sqrt(s.r2))^-1); ## BORRAR esta línea cuando tenga la verdadera solución
-      
+          u_t=(1/m)*ones(1,m)*X;
+          s.r2=(1/m)*sum(X.^2)-u_t.^2+s.epsilon*ones(size(u_t));
+          if s.firsttime
+            s.u1=u_t;
+            s.r21=s.r2;
+            s.firsttime=false;
+          else
+            s.u1=s.beta*s.u1+(1-s.beta)*u_t';
+            s.r21=s.beta*s.r21+(1-s.beta)*s.r2;
+            
+          endif
+          y=(X-u_t)./sqrt(s.r2); ## BORRAR esta línea cuando tenga la verdadera solución
         endif
       endif
     endfunction
@@ -87,7 +94,7 @@ classdef batchnorm < handle
     ## y retorna el gradiente necesario para la retropropagación. que será
     ## pasado a nodos anteriores en el grafo.
     function g=backward(s,dLds)      
-      g=(diag(s.r2)^-1)*dLds; ## gradiantes es igual a 1/diag
+      g=dLds./sqrt(s.r2); ## gradiantes es igual a 1/diag
     endfunction
   endmethods
 endclassdef

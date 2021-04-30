@@ -12,12 +12,13 @@
 ##
 ## Esta capa calcula entonces la pérdida como la mitad de la suma de los
 ## cuadrados de las diferencias
-classdef olsloss < handle
+classdef EC < handle
   properties
     ## Resultados después de la propagación hacia adelante
     outputs=[];
     ## Resultados después de la propagación hacia atrás
     gradient=[];
+    gradientey=[];
   endproperties
 
   methods
@@ -25,6 +26,7 @@ classdef olsloss < handle
     function s=olsloss()
       s.outputs=[];
       s.gradient=[];
+      s.gradientey=[];
     endfunction
 
     ## En funciones de perdida el init no hace mayor cosa más que
@@ -52,9 +54,10 @@ classdef olsloss < handle
       if (isscalar(Ygt) && isboolean(Ygt))
         error("Capas de pérdida deben ser las últimas del grafo");
       elseif (isreal(Y) && ismatrix(Y) && (size(Y)==size(Ygt)))
-        s.outputs = -Ygt'*log(Y);
-        J=s.outputs;
+        s.outputs = -sum(Ygt.*log(Y),2);
+        J=sum(s.outputs)/length(s.outputs);
         s.gradient = [];
+        s.gradientey=(-Ygt./Y);
       else
         error("olsloss espera dos matrices reales del mismo tamaño");
       endif
@@ -66,7 +69,7 @@ classdef olsloss < handle
         error("backward de olsloss no compatible con forward previo");
       endif
       ## Asumiendo que dLds es escalar (la salida debería serlo)
-      s.gradient = (-Ygt'/Y)*dLds;
+      s.gradient = s.gradientey*dLds;
       g=s.gradient;
     endfunction
   endmethods
