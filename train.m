@@ -33,7 +33,7 @@ if (reuseNetwork && exist(file,"file")==2) # Si encuentra ese archivo
   ann.load(file); # Entonces cárguelo para que nadamás siga entrenando donde quedó
 else # Aqui estoy formando una red 
   ann.nEpochs=500;
-  ann.alpha=0.001;  ## Learning rate
+  ann.alpha=0.0001;  ## Learning rate
   ann.beta2=0.99;  ## ADAM si beta2>0
   ann.beta=0.9;    ## Momentum
   ann.minibatch=32;
@@ -43,14 +43,14 @@ else # Aqui estoy formando una red
   ann.add({input_layer(2), # Capa de entrada que recibe 2 dimensiones
            #batchnorm(),
            dense_unbiased(16), # Capa densa sin sesgo 
-           ReLU(), #
+           PReLU(), #
            #batchnorm(), 
            dense_unbiased(16),
-           ReLU(),
+           PReLU(),
            #batchnorm(),
            dense_unbiased(numClasses),
            SoftMax()});
-  ann.add(MSE()); # Capa de pérdida
+  ann.add(EC()); # Capa de pérdida
 endif
 
 loss=ann.train(X,Y,vX,vY); # Se entrena la red 
