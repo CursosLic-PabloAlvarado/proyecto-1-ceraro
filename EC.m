@@ -23,7 +23,7 @@ classdef EC < handle
 
   methods
     ## Constructor solo incializa los datos
-    function s=olsloss()
+    function s=EC()
       s.outputs=[];
       s.gradient=[];
       s.gradientey=[];
