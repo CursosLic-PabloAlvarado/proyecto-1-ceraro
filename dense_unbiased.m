@@ -110,7 +110,7 @@ classdef dense_unbiased < handle
     endfunction
    
     ## Propagación hacia adelante realiza W*x
-    function y=forward(s,X,prediction=false)
+    function y=forward(s,X,prediction=true)
       ## X puede ser un vector columna o una matriz.
       ##
       ## Si X es un vector columna es interpretado como un dato.  Si X
