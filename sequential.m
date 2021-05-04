@@ -106,6 +106,15 @@ classdef sequential < handle
         
         loss=0;
         
+        #Indices para sacar minibatch aleatorio para métodos de optimización 
+        idx_m=randperm(rows(X));
+        numMB=1; 
+        subIdx_m=idx_m((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
+        subX_m=X(subIdx_m,:);
+        V_m=s.layers{i}.backward(subX); # Gradiente para inicializar
+        s_m = V_m.^2;
+        
+        
         ## itere sobre todos los minibatches de la Ã©poca
         for numMB=1:totalBatch; 
           subIdx=idx((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
@@ -148,14 +157,18 @@ classdef sequential < handle
               ##       Observe que va a requerir otros arreglos de celdas
               ##       para almacenar los gradientes filtrados, sus cuadrados,
               ##       etc. para los metodos a implementar
-        case "momentum"
-                subIdx=idx((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
-                subX=X(subIdx,:);
-                
-                V = beta*s.layers{i}.backward(subX) + (1-beta)*s.layers{i}.stateGradient(); ## Filter the gradient
-                s.layers{i}.setState(s.layers{i}.state() - s.alpha*V);
-              
-              
+             case "momentum"
+                V_m = beta*V_m + (1-beta)*s.layers{i}.stateGradient(); ## Filter the gradient
+                s.layers{i}.setState(s.layers{i}.state() - s.alpha*V_m);
+             case "rmsprop"
+                s_m = beta2*s_m + (1-beta2)*(s.layers{i}.stateGradient().^2);
+                gg_m = s.layers{i}.stateGradient()./(sqrt(s_m + rmspepsilon) );
+                s.layers{i}.setState(s.layers{i}.state() - s.alpha*gg_m);
+             case "Adam"
+                s_m = beta2*s_m + (1-beta2)*(s.layers{i}.stateGradient().^2);
+                V_m = beta*V_m + (1-beta)*s.layers{i}.stateGradient(); ## Filter the gradient
+                gg_m = V_m./(sqrt(s_m + rmspepsilon) );
+                s.layers{i}.setState(s.layers{i}.state() - s.alpha*gg_m);  
               otherwise
                 error("MÃ©todo de optimizaciÃ³n desconocido: %s",method);
               endswitch
