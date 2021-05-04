@@ -41,16 +41,16 @@ else # Aqui estoy formando una red
   
   # Se está usando un cell arrays (arreglo de celdas) {}. Una celda es cualquier cosa
   ann.add({input_layer(2), # Capa de entrada que recibe 2 dimensiones
-           batchnorm(),
-           dense_unbiased(numClasses), # Capa densa sin sesgo 
-           sigmoide(),
-           #PReLU(), #
+           #batchnorm(),
+           dense_unbiased(16), # Capa densa sin sesgo 
+           #sigmoide(),
+           PReLU(), #
            #batchnorm(), 
            #dense_unbiased(16),
            #PReLU(),
            #batchnorm(),
-           #dense_unbiased(numClasses),
-           #sigmoide()
+           dense_unbiased(numClasses),
+           sigmoide()
            #SoftMax()
            });
   ann.add(MSE()); # Capa de pérdida
@@ -62,6 +62,17 @@ ann.save(file);
 ## TODO: falta agregar el resto de pruebas y visualizaciones
 
 #x=linspace(-1,1,256);
-#[GX, GY]=meshgrid(x,x);
-#FX=[ones(size(GX(:))) GX(:) GY(:)];
-#FZ=
+#[GX,GY]=meshgrid(x,x);
+#FX = [ones(size(GX(:)),1) GX(:) GY(:)];
+#FZ = hypothesis(FX,Theta);
+#FZ = [FZ; ones(1,columns(FZ))-sum(FZ)]; ## Append the last probability
+
+## A figure with the winners
+#[maxprob,maxk]=max(FZ);
+
+#figure(k+2,"name","Winner classes");
+
+#winner=flip(uint8(reshape(maxk,size(GX))),1);
+#cmap = [0,0,0; 1,0,0; 0,1,0; 0,0,1; 0.5,0,0.5; 0,0.5,0.5; 0.5,0.5,0.0];
+#wimg=ind2rgb(winner,cmap);
+#imshow(wimg);

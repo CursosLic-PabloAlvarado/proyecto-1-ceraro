@@ -67,7 +67,7 @@ classdef batchnorm < handle
         
         ## TODO: Qué hacer en la predicción?
         #y=(X-ones(m,1)*s.u1)*(diag(sqrt(s.r21))^-1);
-        y=(X-s.u1)./sqrt(s.r2);
+        y=(X-s.u1)./sqrt(s.r21);
         
       else
         if (columns(X)==1)

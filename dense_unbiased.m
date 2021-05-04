@@ -74,7 +74,7 @@ classdef dense_unbiased < handle
     ## La función devuelve la dimensión de la salida de la capa
     function outSize=init(s,inputSize)
       
-      cols = inputSize;
+      cols = inputSize+1;
       rows = s.units; # Cantidad de neuronas
       
       ## LeCun Normal (para selu)
@@ -122,9 +122,9 @@ classdef dense_unbiased < handle
       ## proceso de predicción (true)      
       s.inputsX=X;
       if (columns(X)==1) 
-        y = s.W*X; %% Si es vector, asuma columna
+        y = s.W.*[1;X]; %% Si es vector, asuma columna
       else
-        y = X*s.W'; %% Si es matriz de diseño, asuma datos en filas
+        y = [ones(rows(X),1) X]*s.W'; %% Si es matriz de diseño, asuma datos en filas
       endif
       
       # limpie el gradiente en el paso hacia adelante
