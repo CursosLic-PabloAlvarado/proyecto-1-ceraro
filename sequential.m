@@ -106,6 +106,12 @@ classdef sequential < handle
         
         loss=0;
         
+        #Indices para sacar minibatch aleatorio para métodos de optimización 
+        idx_m=randperm(rows(X)); 
+        subIdx_m=idx_m((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
+        subX_m=X(subIdx_m,:);
+        V=s.layers{i}.backward(subX); # Gradiente para inicializar
+        
         ## itere sobre todos los minibatches de la Ã©poca
         for numMB=1:totalBatch; 
           subIdx=idx((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
@@ -148,12 +154,10 @@ classdef sequential < handle
               ##       Observe que va a requerir otros arreglos de celdas
               ##       para almacenar los gradientes filtrados, sus cuadrados,
               ##       etc. para los metodos a implementar
-        case "momentum"
-                subIdx=idx((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
-                subX=X(subIdx,:);
-                
-                V = beta*s.layers{i}.backward(subX) + (1-beta)*s.layers{i}.stateGradient(); ## Filter the gradient
+             case "momentum"
+                V = beta*V + (1-beta)*s.layers{i}.stateGradient(); ## Filter the gradient
                 s.layers{i}.setState(s.layers{i}.state() - s.alpha*V);
+              
               
               
               otherwise
