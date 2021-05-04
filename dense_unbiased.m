@@ -121,14 +121,14 @@ classdef dense_unbiased < handle
       ## está siendo llamado en el proceso de entrenamiento (false) o en el
       ## proceso de predicción (true)      
       
-      #s.inputsX=X;
+      s.inputsX=X;
       
       if (columns(X)==1) 
-        y = s.W*[1;X]; %% Si es vector, asuma columna
-        s.inputsX=[1; X];
+        y = s.W*X; %% Si es vector, asuma columna
+        #s.inputsX=[1; X];
       else
-        y = [ones(rows(X),1) X]*s.W'; %% Si es matriz de diseño, asuma datos en filas
-        s.inputsX=[ones(rows(X),1) X];
+        y =X*s.W'; %% Si es matriz de diseño, asuma datos en filas
+        #s.inputsX=[ones(rows(X),1) X];
       endif
       
       # limpie el gradiente en el paso hacia adelante

@@ -41,14 +41,14 @@ else # Aqui estoy formando una red
   
   # Se está usando un cell arrays (arreglo de celdas) {}. Una celda es cualquier cosa
   ann.add({input_layer(2), # Capa de entrada que recibe 2 dimensiones
-           #batchnorm(),
+           batchnorm(),
            dense_unbiased(16), # Capa densa sin sesgo 
            #sigmoide(),
-           PReLU(), #
+           ReLU(), #
            #batchnorm(), 
            #dense_unbiased(16),
            #PReLU(),
-           #batchnorm(),
+           batchnorm(),
            dense_unbiased(numClasses),
            sigmoide()
            #SoftMax()
@@ -59,12 +59,13 @@ endif
 loss=ann.train(X,Y,vX,vY); # Se entrena la red 
 ann.save(file); 
 
+
 ## TODO: falta agregar el resto de pruebas y visualizaciones
 
-#x=linspace(-1,1,256);
-#[GX,GY]=meshgrid(x,x);
-#FX = [ones(size(GX(:)),1) GX(:) GY(:)];
-#FZ = hypothesis(FX,Theta);
+x=linspace(-1,1,256);
+[GX,GY]=meshgrid(x,x);
+FX = [ones(size(GX(:)),1) GX(:) GY(:)];
+y=ann.test(FX)
 #FZ = [FZ; ones(1,columns(FZ))-sum(FZ)]; ## Append the last probability
 
 ## A figure with the winners

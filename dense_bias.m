@@ -28,7 +28,7 @@
 ## Si el método forward recibe un solo vector (columna) x, el cálculo
 ## se ajusta adecuadamente para producir y.  De otro modo, se asume que
 ## la entrada es una matriz convencional de diseño.
-classdef dense_unbiased < handle
+classdef dense_bias < handle
 
   ## En GNU/Octave "< handle" indica que la clase se deriva de handle
   ## lo que evita que cada vez que se llame un método se cree un 
@@ -53,7 +53,7 @@ classdef dense_unbiased < handle
 
   methods
     ## Constructor inicializa todo vacío
-    function s=dense_unbiased(units)
+    function s=dense_bias(units)
       if (nargin > 0)
         s.units=units;
       else
