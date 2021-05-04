@@ -74,7 +74,7 @@ classdef dense_unbiased < handle
     ## La función devuelve la dimensión de la salida de la capa
     function outSize=init(s,inputSize)
       
-      cols = inputSize;
+      cols = inputSize+1;
       rows = s.units; # Cantidad de neuronas
       
       ## LeCun Normal (para selu)
