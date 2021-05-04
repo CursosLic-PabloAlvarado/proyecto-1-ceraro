@@ -42,6 +42,7 @@ else # Aqui estoy formando una red
   # Se está usando un cell arrays (arreglo de celdas) {}. Una celda es cualquier cosa
   ann.add({input_layer(2), # Capa de entrada que recibe 2 dimensiones
            batchnorm(),
+           #batchnorm(),
            dense_unbiased(16), # Capa densa sin sesgo 
            #sigmoide(),
            ReLU(), #
@@ -59,21 +60,23 @@ endif
 loss=ann.train(X,Y,vX,vY); # Se entrena la red 
 ann.save(file); 
 
-
+y=ann.test(X)
+f=y./sum(y,1)
+sum(f,1)
 ## TODO: falta agregar el resto de pruebas y visualizaciones
 
 x=linspace(-1,1,256);
 [GX,GY]=meshgrid(x,x);
 FX = [ones(size(GX(:)),1) GX(:) GY(:)];
-y=ann.test(FX)
-#FZ = [FZ; ones(1,columns(FZ))-sum(FZ)]; ## Append the last probability
+FZ = f;
+FZ = [FZ; ones(1,columns(FZ))-sum(FZ)]; ## Append the last probability
 
 ## A figure with the winners
-#[maxprob,maxk]=max(FZ);
+[maxprob,maxk]=max(FZ);
 
-#figure(k+2,"name","Winner classes");
+figure(2,"name","Winner classes");
 
-#winner=flip(uint8(reshape(maxk,size(GX))),1);
-#cmap = [0,0,0; 1,0,0; 0,1,0; 0,0,1; 0.5,0,0.5; 0,0.5,0.5; 0.5,0.5,0.0];
-#wimg=ind2rgb(winner,cmap);
-#imshow(wimg);
+winner=flip(uint8(reshape(maxk,size(GX))),1);
+cmap = [0,0,0; 1,0,0; 0,1,0; 0,0,1; 0.5,0,0.5; 0,0.5,0.5; 0.5,0.5,0.0];
+wimg=ind2rgb(winner,cmap);
+imshow(wimg);

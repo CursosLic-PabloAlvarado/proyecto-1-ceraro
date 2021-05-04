@@ -75,7 +75,7 @@ classdef dense_unbiased < handle
     function outSize=init(s,inputSize)
       
       cols = inputSize;
-      rows = s.units; # Cantidad de neuronas
+      rows = s.units;
       
       ## LeCun Normal (para selu)
       s.W=normrnd(0,1/sqrt(cols),rows,cols);
@@ -120,14 +120,12 @@ classdef dense_unbiased < handle
       ## El parámetro 'prediction' permite determinar si este método
       ## está siendo llamado en el proceso de entrenamiento (false) o en el
       ## proceso de predicción (true)      
-      
       s.inputsX=X;
-      
       if (columns(X)==1) 
         y = s.W*X; %% Si es vector, asuma columna
         #s.inputsX=[1; X];
       else
-        y =X*s.W'; %% Si es matriz de diseño, asuma datos en filas
+        y = X*s.W'; %% Si es matriz de diseño, asuma datos en filas
         #s.inputsX=[ones(rows(X),1) X];
       endif
       
