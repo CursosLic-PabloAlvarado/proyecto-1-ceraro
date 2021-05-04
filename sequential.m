@@ -107,7 +107,8 @@ classdef sequential < handle
         loss=0;
         
         #Indices para sacar minibatch aleatorio para métodos de optimización 
-        idx_m=randperm(rows(X)); 
+        idx_m=randperm(rows(X));
+        numMB=1; 
         subIdx_m=idx_m((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
         subX_m=X(subIdx_m,:);
         V_m=s.layers{i}.backward(subX); # Gradiente para inicializar
