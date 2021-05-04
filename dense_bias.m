@@ -122,11 +122,13 @@ classdef dense_bias < handle
       ## proceso de predicción (true)      
       
       #s.inputsX=X;
-      s.inputsX=[ones(1,columns(X)); X];
+      
       if (columns(X)==1) 
-        y = s.W.*[1;X]; %% Si es vector, asuma columna
+        s.inputsX=[1;X];
+        y = s.W.*s.inputsX; %% Si es vector, asuma columna
       else
-        y = [ones(rows(X),1) X]*s.W'; %% Si es matriz de diseño, asuma datos en filas
+        s.inputsX=[ones(rows(X),1) X];
+        y = s.inputsX*s.W'; %% Si es matriz de diseño, asuma datos en filas
       endif
       
       # limpie el gradiente en el paso hacia adelante
@@ -142,9 +144,11 @@ classdef dense_bias < handle
       if (columns(dLds)==1)
         s.gradientW = dLds*s.inputsX';
         s.gradientX = s.W'*dLds;
+        s.gradientX=s.gradientX(2:end,:);
       else
         s.gradientW = dLds'*s.inputsX;
         s.gradientX = dLds*s.W;
+        s.gradientX=s.gradientX(:,2:end);
       endif
       
       g=s.gradientX;

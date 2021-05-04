@@ -25,7 +25,7 @@ classdef sequential < handle
     ## Training parameters
     nEpochs=2000;
     minibatch=128;
-
+    V_m=[];
     alpha=0.01;     ## Learning rate
     beta = 0.95     ## Momentum: 0 para no usar momentum
     beta2 = 0.99    ## Polo de filtro de cuadrados (0: no usar Adam))
@@ -40,6 +40,7 @@ classdef sequential < handle
   methods
     function s=sequential()
       layers={}; 
+      V_m=[];
     endfunction
     
     function add(s,layer) # Método para agregar capas 
@@ -107,12 +108,12 @@ classdef sequential < handle
         loss=0;
         
         #Indices para sacar minibatch aleatorio para métodos de optimización 
-        idx_m=randperm(rows(X));
-        numMB=1; 
-        subIdx_m=idx_m((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
-        subX_m=X(subIdx_m,:);
-        V_m=s.layers{i}.backward(subX); # Gradiente para inicializar
-        s_m = V_m.^2;
+        #idx_m=randperm(rows(X));
+        #numMB=1; 
+        #subIdx_m=idx_m((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
+        #subX_m=X(subIdx_m,:);
+        #V_m=s.layers{i}.backward(subX_m); # Gradiente para inicializar
+        #s_m = V_m.^2;
         
         
         ## itere sobre todos los minibatches de la Ã©poca
@@ -133,6 +134,7 @@ classdef sequential < handle
           
           ## Back prop
           g=s.layers{numLayers}.backward(1);
+          
           for l=numLayers-1:-1:1
             g=s.layers{l}.backward(g);
           endfor

@@ -10,7 +10,7 @@
 1;
 pkg load statistics;
 
-numClasses=2;
+numClasses=3;
 
 #datashape='spirals';
 ##datashape='curved';
@@ -37,7 +37,7 @@ else # Aqui estoy formando una red
   ann.beta2=0.99;  ## ADAM si beta2>0
   ann.beta=0.9;    ## Momentum
   ann.minibatch=32;
-  ann.method="stochastic";
+  ann.method="momentum";
   
   # Se está usando un cell arrays (arreglo de celdas) {}. Una celda es cualquier cosa
   ann.add({input_layer(2), # Capa de entrada que recibe 2 dimensiones
@@ -56,10 +56,10 @@ else # Aqui estoy formando una red
            #PReLU(),       
            #dense_unbiased(32),
            #PReLU(),  
-           dense_unbiased(32),
-           PReLU(),             
+           #dense_unbiased(32),
+           #PReLU(),             
            #batchnorm(),
-           dense_unbiased(numClasses),
+           dense_bias(numClasses),
            sigmoide()
            #SoftMax()
            });
@@ -103,6 +103,6 @@ plot(epochs,loss);
 #plot(epochs,evalhyp(areas,regress(D,5)),'r;n=5;','linewidth',3);
 #plot(epochs,evalhyp(areas,regress(D,9)),'b;n=9;','linewidth',3);
 
-axis([1 500 minloss maxloss]);  
+#axis([1 500 minloss maxloss]);  
 xlabel('epochs');
 ylabel("loss");
