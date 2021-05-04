@@ -148,7 +148,12 @@ classdef sequential < handle
               ##       Observe que va a requerir otros arreglos de celdas
               ##       para almacenar los gradientes filtrados, sus cuadrados,
               ##       etc. para los metodos a implementar
-              
+        case "momentum"
+                subIdx=idx((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
+                subX=X(subIdx,:);
+                
+                V = beta*s.layers{i}.backward(subX) + (1-beta)*s.layers{i}.stateGradient(); ## Filter the gradient
+                s.layers{i}.setState(s.layers{i}.state() - s.alpha*V);
               
               
               otherwise
