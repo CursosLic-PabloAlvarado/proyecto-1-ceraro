@@ -74,7 +74,7 @@ classdef dense_unbiased < handle
     ## La función devuelve la dimensión de la salida de la capa
     function outSize=init(s,inputSize)
       
-      cols = inputSize;
+      cols = inputSize+1;
       rows = s.units; # Cantidad de neuronas
       
       ## LeCun Normal (para selu)
@@ -110,7 +110,7 @@ classdef dense_unbiased < handle
     endfunction
    
     ## Propagación hacia adelante realiza W*x
-    function y=forward(s,X,prediction=true)
+    function y=forward(s,X,prediction=false)
       ## X puede ser un vector columna o una matriz.
       ##
       ## Si X es un vector columna es interpretado como un dato.  Si X
@@ -120,11 +120,13 @@ classdef dense_unbiased < handle
       ## El parámetro 'prediction' permite determinar si este método
       ## está siendo llamado en el proceso de entrenamiento (false) o en el
       ## proceso de predicción (true)      
-      s.inputsX=X;
+      
+      #s.inputsX=X;
+      s.inputsX=[ones(1,columns(X)); X];
       if (columns(X)==1) 
-        y = s.W*X; %% Si es vector, asuma columna
+        y = s.W*[1;X]; %% Si es vector, asuma columna
       else
-        y = X*s.W'; %% Si es matriz de diseño, asuma datos en filas
+        y = [ones(rows(X),1) X]*s.W'; %% Si es matriz de diseño, asuma datos en filas
       endif
       
       # limpie el gradiente en el paso hacia adelante

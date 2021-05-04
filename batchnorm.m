@@ -60,14 +60,14 @@ classdef batchnorm < handle
     ## El parámetro 'prediction' permite determinar si este método
     ## está siendo llamado en el proceso de entrenamiento (false) o en el
     ## proceso de predicción (true)      
-    function y=forward(s,X,prediction=true)
+    function y=forward(s,X,prediction=false)
       m=rows(X);
    
       if (prediction)
         
         ## TODO: Qué hacer en la predicción?
         #y=(X-ones(m,1)*s.u1)*(diag(sqrt(s.r21))^-1);
-        y=(X-s.u1)./sqrt(s.r2);
+        y=(X-s.u1)./sqrt(s.r21);
         
       else
         if (columns(X)==1)
