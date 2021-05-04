@@ -157,9 +157,7 @@ classdef sequential < handle
              case "momentum"
                 V = beta*V + (1-beta)*s.layers{i}.stateGradient(); ## Filter the gradient
                 s.layers{i}.setState(s.layers{i}.state() - s.alpha*V);
-              
-              
-              
+        
               otherwise
                 error("Método de optimización desconocido: %s",method);
               endswitch
