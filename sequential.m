@@ -110,8 +110,8 @@ classdef sequential < handle
         idx_m=randperm(rows(X)); 
         subIdx_m=idx_m((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
         subX_m=X(subIdx_m,:);
-        V=s.layers{i}.backward(subX); # Gradiente para inicializar
-        s_m = V.^2;
+        V_m=s.layers{i}.backward(subX); # Gradiente para inicializar
+        s_m = V_m.^2;
         
         
         ## itere sobre todos los minibatches de la época
@@ -157,13 +157,17 @@ classdef sequential < handle
               ##       para almacenar los gradientes filtrados, sus cuadrados,
               ##       etc. para los metodos a implementar
              case "momentum"
-                V = beta*V + (1-beta)*s.layers{i}.stateGradient(); ## Filter the gradient
-                s.layers{i}.setState(s.layers{i}.state() - s.alpha*V);
+                V_m = beta*V_m + (1-beta)*s.layers{i}.stateGradient(); ## Filter the gradient
+                s.layers{i}.setState(s.layers{i}.state() - s.alpha*V_m);
              case "rmsprop"
                 s_m = beta2*s_m + (1-beta2)*(s.layers{i}.stateGradient().^2);
                 gg_m = s.layers{i}.stateGradient()./(sqrt(s_m + rmspepsilon) );
                 s.layers{i}.setState(s.layers{i}.state() - s.alpha*gg_m);
-             
+             case "Adam"
+                s_m = beta2*s_m + (1-beta2)*(s.layers{i}.stateGradient().^2);
+                V_m = beta*V_m + (1-beta)*s.layers{i}.stateGradient(); ## Filter the gradient
+                gg_m = V_m./(sqrt(s_m + rmspepsilon) );
+                s.layers{i}.setState(s.layers{i}.state() - s.alpha*gg_m);  
               otherwise
                 error("Método de optimización desconocido: %s",method);
               endswitch
