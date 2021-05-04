@@ -10,9 +10,9 @@
 1;
 pkg load statistics;
 
-numClasses=4;
+numClasses=3;
 
-##datashape='spirals';
+#datashape='spirals';
 ##datashape='curved';
 datashape='vertical';
 
@@ -33,7 +33,7 @@ if (reuseNetwork && exist(file,"file")==2) # Si encuentra ese archivo
   ann.load(file); # Entonces cárguelo para que nadamás siga entrenando donde quedó
 else # Aqui estoy formando una red 
   ann.nEpochs=500;
-  ann.alpha=0.0001;  ## Learning rate
+  ann.alpha=0.001;  ## Learning rate
   ann.beta2=0.99;  ## ADAM si beta2>0
   ann.beta=0.9;    ## Momentum
   ann.minibatch=32;
@@ -42,12 +42,22 @@ else # Aqui estoy formando una red
   # Se está usando un cell arrays (arreglo de celdas) {}. Una celda es cualquier cosa
   ann.add({input_layer(2), # Capa de entrada que recibe 2 dimensiones
            #batchnorm(),
-           dense_unbiased(16), # Capa densa sin sesgo 
+           #dense_unbiased(16), # Capa densa sin sesgo 
            #sigmoide(),
-           ReLU(), #
+           #ReLU(), #
            #batchnorm(), 
-           #dense_unbiased(16),
-           #PReLU(),
+           dense_unbiased(32),
+           PReLU(),
+           #batchnorm(),            
+           dense_unbiased(32),
+           PReLU(),
+           #batchnorm(),            
+           dense_unbiased(32),
+           PReLU(),       
+           dense_unbiased(32),
+           PReLU(),  
+           dense_unbiased(32),
+           PReLU(),             
            #batchnorm(),
            dense_unbiased(numClasses),
            sigmoide()
@@ -59,19 +69,19 @@ endif
 loss=ann.train(X,Y,vX,vY); # Se entrena la red 
 ann.save(file); 
 
-y=ann.test(X)
-f=y./sum(y,1)
-sum(f,1)
+
 ## TODO: falta agregar el resto de pruebas y visualizaciones
 
 x=linspace(-1,1,256);
 [GX,GY]=meshgrid(x,x);
-FX = [ones(size(GX(:)),1) GX(:) GY(:)];
-FZ = f;
-FZ = [FZ; ones(1,columns(FZ))-sum(FZ)]; ## Append the last probability
+FX = [GX(:) GY(:)];
+y=ann.test(FX);
+FZ = y./sum(y,1);
+
+#FZ = [FZ'; ones(1,columns(FZ'))-sum(FZ')]; ## Append the last probability
 
 ## A figure with the winners
-[maxprob,maxk]=max(FZ);
+[maxprob,maxk]=max(FZ');
 
 figure(2,"name","Winner classes");
 
