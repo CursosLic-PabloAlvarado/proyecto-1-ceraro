@@ -124,7 +124,7 @@ classdef dense_unbiased < handle
       #s.inputsX=X;
       s.inputsX=[ones(1,columns(X)); X];
       if (columns(X)==1) 
-        y = s.W*[1;X]; %% Si es vector, asuma columna
+        y = s.W.*[1;X]; %% Si es vector, asuma columna
       else
         y = [ones(rows(X),1) X]*s.W'; %% Si es matriz de diseño, asuma datos en filas
       endif
