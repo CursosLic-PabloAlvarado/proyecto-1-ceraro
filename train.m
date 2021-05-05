@@ -32,7 +32,7 @@ reuseNetwork = false; # Con reusenetwork = true la red una vez iniciado el entre
 if (reuseNetwork && exist(file,"file")==2) # Si encuentra ese archivo  
   ann.load(file); # Entonces cárguelo para que nadamás siga entrenando donde quedó
 else # Aqui estoy formando una red 
-  ann.nEpochs=500;
+  ann.nEpochs=1000;
   ann.alpha=0.001;  ## Learning rate
   ann.beta2=0.99;  ## ADAM si beta2>0
   ann.beta=0.9;    ## Momentum
@@ -46,20 +46,20 @@ else # Aqui estoy formando una red
            #sigmoide(),
            #ReLU(), #
            #batchnorm(), 
-           dense_unbiased(32),
-           PReLU(),
+           #dense_unbiased(32),
+           #PReLU(),
            #batchnorm(),            
-           dense_unbiased(32),
-           PReLU(),
+           #dense_unbiased(32),
+           #PReLU(),
            #batchnorm(),            
-           dense_unbiased(32),
+           #dense_unbiased(32),
            PReLU(),       
            dense_unbiased(32),
            PReLU(),  
            dense_unbiased(32),
            PReLU(),             
-           #batchnorm(),
-           dense_unbiased(numClasses),
+           batchnorm(),
+           dense_bias(numClasses),
            sigmoide()
            #SoftMax()
            });
@@ -89,3 +89,20 @@ winner=flip(uint8(reshape(maxk,size(GX))),1);
 cmap = [0,0,0; 1,0,0; 0,1,0; 0,0,1; 0.5,0,0.5; 0,0.5,0.5; 0.5,0.5,0.0];
 wimg=ind2rgb(winner,cmap);
 imshow(wimg);
+
+maxloss=max(loss)
+minloss=min(loss)
+
+## Limits for plot of regressed lines
+epochs=linspace(1,1000,1000)';
+
+figure(3,"name","Loss vs epochs");
+
+plot(epochs,loss);
+#plot(epochs,evalhyp(areas,regress(D,3)),'g;n=3;','linewidth',3);
+#plot(epochs,evalhyp(areas,regress(D,5)),'r;n=5;','linewidth',3);
+#plot(epochs,evalhyp(areas,regress(D,9)),'b;n=9;','linewidth',3);
+
+#axis([1 500 minloss maxloss]);  
+xlabel('epochs');
+ylabel("loss");

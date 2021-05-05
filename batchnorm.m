@@ -33,6 +33,7 @@ classdef batchnorm < handle
       s.u1=[];
       s.r21=[];
       s.r2=[];
+      #s.firsttime=true;
       ## TODO: 
       
     endfunction
@@ -62,7 +63,6 @@ classdef batchnorm < handle
     ## proceso de predicción (true)      
     function y=forward(s,X,prediction=false)
       m=rows(X);
-   
       if (prediction)
         
         ## TODO: Qué hacer en la predicción?
@@ -82,9 +82,8 @@ classdef batchnorm < handle
             s.r21=s.r2;
             s.firsttime=false;
           else
-            s.u1=s.beta*s.u1+(1-s.beta)*u_t';
-            s.r21=s.beta*s.r21+(1-s.beta)*s.r2;
-            
+            s.u1=s.beta*s.u1+(1-s.beta)*u_t;
+            s.r21=s.beta*s.r21+(1-s.beta)*s.r2;  
           endif
           y=(X-u_t)./sqrt(s.r2); ## BORRAR esta línea cuando tenga la verdadera solución
         endif

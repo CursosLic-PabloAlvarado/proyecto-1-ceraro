@@ -21,7 +21,10 @@ classdef sequential < handle
   properties
     ## Constantes:
     layers={}; # Capas
-
+    
+    V_m=[];
+    firsttime=true;
+    
     ## Training parameters
     nEpochs=2000;
     minibatch=128;
@@ -40,6 +43,8 @@ classdef sequential < handle
   methods
     function s=sequential()
       layers={}; 
+      V_m=[];
+      s.firsttime=true;
     endfunction
     
     function add(s,layer) # Método para agregar capas 
@@ -107,12 +112,12 @@ classdef sequential < handle
         loss=0;
         
         #Indices para sacar minibatch aleatorio para métodos de optimización 
-        idx_m=randperm(rows(X));
-        numMB=1; 
-        subIdx_m=idx_m((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
-        subX_m=X(subIdx_m,:);
-        V_m=s.layers{i}.backward(subX); # Gradiente para inicializar
-        s_m = V_m.^2;
+        #idx_m=randperm(rows(X));
+        #numMB=1; 
+        #subIdx_m=idx_m((numMB-1)*minibatch+1:min(rows(X),numMB*minibatch)); 
+        #subX_m=X(subIdx_m,:);
+        #V_m=s.layers{i}.backward(subX_m); # Gradiente para inicializar
+        #s_m = V_m.^2;
         
         
         ## itere sobre todos los minibatches de la Ã©poca
@@ -133,6 +138,7 @@ classdef sequential < handle
           
           ## Back prop
           g=s.layers{numLayers}.backward(1);
+          
           for l=numLayers-1:-1:1
             g=s.layers{l}.backward(g);
           endfor
@@ -140,8 +146,6 @@ classdef sequential < handle
           ## Update rules
           for i=1:numLayers-1 ## Excluya capa de pÃ©rdida 
             if (s.layers{i}.hasState()) # Si la capa por la que voy tiene un estado (pesos)
-           
-              
               switch (s.method)
               case "batch"
                 s.layers{i}.setState(s.layers{i}.state() -
